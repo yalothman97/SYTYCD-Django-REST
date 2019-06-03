@@ -73,7 +73,18 @@ class UserSerializer(serializers.ModelSerializer):
 		return PastBookingDetailsSerializer(bookings).data
 
 
+class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    class Meta:
+        model = User
+        fields = ['username', 'password']
 
+    def create(self, validated_data):
+        username = validated_data['username']
+        password = validated_data['password']
+        new_user = User(username=username)
+        new_user.save()
+        return validated_data
 
 
 
