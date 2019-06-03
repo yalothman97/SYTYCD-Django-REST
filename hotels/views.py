@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Hotel, Booking
 from .permissions import IsBookedByUser, IsNotInPast
-from .serializers import HotelsListSerializer, HotelDetailsSerializer, BookHotelSerializer, BookingDetailsSerializer, UserSerializer
+from .serializers import HotelsListSerializer, HotelDetailsSerializer, BookHotelSerializer, BookingDetailsSerializer, UserSerializer, UserCreateSerializer
 
 
 class HotelsList(ListAPIView):
@@ -62,5 +62,6 @@ class Profile(RetrieveAPIView):
 		return self.request.user
 
 
-
+class Register(CreateAPIView):
+    serializer_class = UserCreateSerializer
 
