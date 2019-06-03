@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, DestroyAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, RetrieveUpdateAPIView
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Hotel, Booking
+from .models import Booking
 from .permissions import IsBookedByUser, IsNotInPast
 from .serializers import HotelsListSerializer, HotelDetailsSerializer, BookHotelSerializer, BookingDetailsSerializer, UserSerializer
 
@@ -29,7 +29,7 @@ class BookingsList(ListAPIView):
 
 	def get_queryset(self):
 		today = datetime.today()
-		return Booking.objects.filter(user=self.request.user, check_in__gte=today)
+		return Booking.objects.get(user=self.request.user, check_in__gte=today)
 
 
 class BookHotel(CreateAPIView):
@@ -51,12 +51,13 @@ class ModifyBooking(RetrieveUpdateAPIView):
 class CancelBooking(DestroyAPIView):
 	queryset = Booking.objects.all()
 	lookup_field = 'id'
-	lookup_url_kwarg = 'booking_id'
+	lookup_url_kwarg = 'bookig_id'
 	permission_classes = [IsBookedByUser, IsNotInPast]
 
 
 class Profile(RetrieveAPIView):
 	serializer_class = UserSerializer
+	permission_classes = [IsAuthenticated]
 
 	def get_object(self):
 		return self.request.user
